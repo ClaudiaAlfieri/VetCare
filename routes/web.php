@@ -8,3 +8,4 @@ Route::get('/', function () {
 
 Route::view('/pets', 'pets.index');
 Route::view('/pets/1', 'pets.show');
+Route::view('/pets/create', 'pets.create');
