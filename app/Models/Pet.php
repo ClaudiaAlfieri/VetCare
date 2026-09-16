@@ -17,4 +17,9 @@ class Pet extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
 }
