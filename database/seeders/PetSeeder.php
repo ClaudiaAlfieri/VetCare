@@ -15,7 +15,7 @@ class PetSeeder extends Seeder
      */
     public function run(): void
     {
-        $owner = User::where('email', 'test@example.com')->first();
+        $owner = User::where('email', 'user@vetcare.pt')->first();
         $dog = Species::where('name', 'Cão')->first();
         $cat = Species::where('name', 'Gato')->first();
 
