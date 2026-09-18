@@ -13,3 +13,4 @@ Route::view('/pets/1/edit', 'pets.edit');
 Route::view( uri: '/veterinarians', view: 'veterinarians.index');
 Route::view( uri: '/veterinarians/1', view: 'veterinarians.show');
 Route::view( uri: '/veterinarians/create', view: 'veterinarians.create');
+Route::view( uri: '/veterinarians/1/edit', view: 'veterinarians.edit');
