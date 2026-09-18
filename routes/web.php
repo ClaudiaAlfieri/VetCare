@@ -10,5 +10,6 @@ Route::view('/pets', 'pets.index');
 Route::view('/pets/1', 'pets.show');
 Route::view('/pets/create', 'pets.create');
 Route::view('/pets/1/edit', 'pets.edit');
-Route::view( uri: '/veterinarians', view: 'veterinarians.index'); // /veterinarians
-Route::view( uri: '/veterinarians/1', view: 'veterinarians.show'); // /veterinarians/1
+Route::view( uri: '/veterinarians', view: 'veterinarians.index');
+Route::view( uri: '/veterinarians/1', view: 'veterinarians.show');
+Route::view( uri: '/veterinarians/create', view: 'veterinarians.create');
