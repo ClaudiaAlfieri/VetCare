@@ -15,3 +15,4 @@ Route::view(uri: '/veterinarians/1', view: 'veterinarians.show');
 Route::view(uri: '/veterinarians/create', view: 'veterinarians.create');
 Route::view(uri: '/veterinarians/1/edit', view: 'veterinarians.edit');
 Route::view(uri: '/services', view: 'services.index');
+Route::view(uri: '/services/1', view: 'services.show');
