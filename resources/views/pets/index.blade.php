@@ -1,240 +1,61 @@
-<!doctype html>
-<html lang="pt">
+@extends('layout.main')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title', 'Animais - VetCare')
 
-    <title>Animais - VetCare</title>
-
-    @vite(['resources/css/app.scss', 'resources/js/app.js'])
-</head>
-
-<body class="bg-light">
-
-<!-- =========================================================
-     MENU / NAVEGAÇÃO
-========================================================= -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-    <div class="container">
-
-        <a class="navbar-brand fw-bold" href="../home.html">
-            <i class="bi bi-heart-pulse"></i>
-            VetCare
-        </a>
-
-        <button
-            class="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarMain"
-        >
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-
-        <div class="collapse navbar-collapse" id="navbarMain">
-
-            <ul class="navbar-nav me-auto">
-
-                <li class="nav-item">
-                    <a class="nav-link" href="../home.html">
-                        Início
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link active" href="index.html">
-                        Animais
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Consultas
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Veterinários
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        Serviços
-                    </a>
-                </li>
-
-            </ul>
-
-
-            <!-- Área do utilizador autenticado -->
-            <div class="dropdown">
-
-                <button
-                    class="btn btn-outline-light dropdown-toggle"
-                    data-bs-toggle="dropdown">
-
-                    <i class="bi bi-person-circle"></i>
-                    admin@vetcare.pt
-
-                </button>
-
-                <ul class="dropdown-menu dropdown-menu-end">
-
-                    <li>
-                        <span class="dropdown-item-text">
-                            Perfil: Admin
-                        </span>
-                    </li>
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li>
-<a
-                        class="dropdown-item"
-                        href="../login.html">
-
-                        Terminar sessão
-
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</nav>
-
-
-<!-- =========================================================
-     CONTEÚDO PRINCIPAL
-========================================================= -->
-<main class="container py-5">
+@section('content')
 
     <!-- Cabeçalho da página -->
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-
-            <h1 class="h2 mb-1">
-                Animais
-            </h1>
-
-            <p class="text-muted mb-0">
-                Gestão dos animais registados na clínica.
-            </p>
-
+            <h1 class="h2 mb-1">Animais</h1>
+            <p class="text-muted mb-0">Gestão dos animais registados na clínica.</p>
         </div>
 
-
-<a
-        href="create.html"
-        class="btn btn-primary">
-
-        <i class="bi bi-plus-lg"></i>
-        Novo animal
-
+        <a href="{{ url('/pets/create') }}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i>
+            Novo animal
         </a>
 
     </div>
 
 
-    <!-- =====================================================
-         MENSAGEM FLASH DE EXEMPLO
-    ====================================================== -->
+    <!-- MENSAGEM FLASH DE EXEMPLO -->
     <div class="alert alert-success alert-dismissible fade show">
-
         Animal registado com sucesso.
-
-        <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="alert">
-        </button>
-
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
 
     <div class="card shadow-sm">
-
         <div class="card-body">
 
-            <!-- =================================================
-             PESQUISA / FILTROS
-        ================================================== -->
+            <!-- PESQUISA / FILTROS -->
             <form class="row g-3 mb-4">
-
                 <div class="col-md-6">
-
-                    <input
-                        type="search"
-                        class="form-control"
-                        placeholder="Pesquisar animal..."
-                    >
-
+                    <input type="search" class="form-control" placeholder="Pesquisar animal...">
                 </div>
-
-
                 <div class="col-md-3">
-
                     <select class="form-select">
-
-                        <option>
-                            Todas as espécies
-                        </option>
-
-                        <option>
-                            Cão
-                        </option>
-
-                        <option>
-                            Gato
-                        </option>
-
-                        <option>
-                            Coelho
-                        </option>
-
+                        <option>Todas as espécies</option>
+                        <option>Cão</option>
+                        <option>Gato</option>
+                        <option>Coelho</option>
                     </select>
-
                 </div>
-
-
                 <div class="col-md-3">
-
-                    <button
-                        type="submit"
-                        class="btn btn-outline-primary w-100">
-
+                    <button type="submit" class="btn btn-outline-primary w-100">
                         <i class="bi bi-search"></i>
                         Pesquisar
-
                     </button>
-
                 </div>
-
             </form>
 
 
-            <!-- =================================================
-                 LISTAGEM
-            ================================================== -->
+            <!-- LISTAGEM -->
             <div class="table-responsive">
-
                 <table class="table table-hover align-middle">
-
                     <thead>
-
                     <tr>
                         <th>#</th>
                         <th>Nome</th>
@@ -242,328 +63,111 @@
                         <th>Tutor</th>
                         <th>Data nascimento</th>
                         <th>Estado</th>
-                        <th class="text-end">
-                            Ações
-                        </th>
+                        <th class="text-end">Ações</th>
                     </tr>
-
                     </thead>
-
-
                     <tbody>
-
                     <tr>
-
                         <td>1</td>
-
-                        <td>
-                            <strong>
-                                Max
-                            </strong>
-                        </td>
-
-                        <td>
-                            Cão
-                        </td>
-
-                        <td>
-                            Ana Silva
-                        </td>
-
-                        <td>
-                            12/03/2021
-                        </td>
-
-                        <td>
-                            <span class="badge text-bg-success">
-                                Ativo
-                            </span>
-                        </td>
-
+                        <td><strong>Max</strong></td>
+                        <td>Cão</td>
+                        <td>Ana Silva</td>
+                        <td>12/03/2021</td>
+                        <td><span class="badge text-bg-success">Ativo</span></td>
                         <td class="text-end">
-
-                            <a
-                                href="show.html"
-                                class="btn btn-sm btn-outline-secondary"
-                                title="Ver">
-
+                            <a href="{{ url('/pets/1') }}" class="btn btn-sm btn-outline-secondary" title="Ver">
                                 <i class="bi bi-eye"></i>
-
                             </a>
-
-                            <a
-                                href="edit.html"
-                                class="btn btn-sm btn-outline-primary"
-                                title="Editar">
-
+                            <a href="{{ url('/pets/1/edit') }}" class="btn btn-sm btn-outline-primary" title="Editar">
                                 <i class="bi bi-pencil"></i>
-
                             </a>
-
-                            <button
-                                type="button"
-                                class="btn btn-sm btn-outline-danger"
-                                data-bs-toggle="modal"
-                                data-bs-target="#deleteModal"
-                                title="Eliminar">
-
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Eliminar">
                                 <i class="bi bi-trash"></i>
-
                             </button>
-
                         </td>
-
                     </tr>
-
-
                     <tr>
-
                         <td>2</td>
-
-                        <td>
-                            <strong>
-                                Luna
-                            </strong>
-                        </td>
-
-                        <td>
-                            Gato
-                        </td>
-
-                        <td>
-                            João Santos
-                        </td>
-
-                        <td>
-                            07/08/2022
-                        </td>
-
-                        <td>
-                            <span class="badge text-bg-success">
-                                Ativo
-                            </span>
-                        </td>
-
+                        <td><strong>Luna</strong></td>
+                        <td>Gato</td>
+                        <td>João Santos</td>
+                        <td>07/08/2022</td>
+                        <td><span class="badge text-bg-success">Ativo</span></td>
                         <td class="text-end">
-
-                            <a
-                                href="show.html"
-                                class="btn btn-sm btn-outline-secondary">
-
+                            <a href="{{ url('/pets/1') }}" class="btn btn-sm btn-outline-secondary">
                                 <i class="bi bi-eye"></i>
-
                             </a>
-
-                            <a
-                                href="edit.html"
-                                class="btn btn-sm btn-outline-primary">
-
+                            <a href="{{ url('/pets/1/edit') }}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>
-
                             </a>
-
                             <button class="btn btn-sm btn-outline-danger">
-
                                 <i class="bi bi-trash"></i>
-
                             </button>
-
                         </td>
-
                     </tr>
-
-
                     <tr>
-
                         <td>3</td>
-
-                        <td>
-                            <strong>
-                                Tobias
-                            </strong>
-                        </td>
-
-                        <td>
-                            Coelho
-                        </td>
-
-                        <td>
-                            Maria Costa
-                        </td>
-
-                        <td>
-                            15/01/2024
-                        </td>
-
-                        <td>
-                            <span class="badge text-bg-secondary">
-                                Inativo
-                            </span>
-                        </td>
-
+                        <td><strong>Tobias</strong></td>
+                        <td>Coelho</td>
+                        <td>Maria Costa</td>
+                        <td>15/01/2024</td>
+                        <td><span class="badge text-bg-secondary">Inativo</span></td>
                         <td class="text-end">
-
-                            <a
-                                href="show.html"
-                                class="btn btn-sm btn-outline-secondary">
-
+                            <a href="{{ url('/pets/1') }}" class="btn btn-sm btn-outline-secondary">
                                 <i class="bi bi-eye"></i>
-
                             </a>
-
-                            <a
-                                href="edit.html"
-                                class="btn btn-sm btn-outline-primary">
-
+                            <a href="{{ url('/pets/1/edit') }}" class="btn btn-sm btn-outline-primary">
                                 <i class="bi bi-pencil"></i>
-
                             </a>
-
                             <button class="btn btn-sm btn-outline-danger">
-
                                 <i class="bi bi-trash"></i>
-
                             </button>
-
                         </td>
-
                     </tr>
-
                     </tbody>
-
                 </table>
-
             </div>
 
 
-            <!-- =================================================
-                 PAGINAÇÃO
-            ================================================== -->
+            <!-- PAGINAÇÃO -->
             <nav>
-
                 <ul class="pagination justify-content-center mb-0">
-
                     <li class="page-item disabled">
-
-                        <a class="page-link" href="#">
-                            Anterior
-                        </a>
-
+                        <a class="page-link" href="#">Anterior</a>
                     </li>
-
                     <li class="page-item active">
-
-                        <a class="page-link" href="#">
-                            1
-                        </a>
-
+                        <a class="page-link" href="#">1</a>
                     </li>
-
                     <li class="page-item">
-
-                        <a class="page-link" href="#">
-                            2
-                        </a>
-
+                        <a class="page-link" href="#">2</a>
                     </li>
-
                     <li class="page-item">
-
-                        <a class="page-link" href="#">
-                            Seguinte
-                        </a>
-
+                        <a class="page-link" href="#">Seguinte</a>
                     </li>
-
                 </ul>
-
             </nav>
 
         </div>
-
     </div>
 
-</main>
 
-
-<!-- =========================================================
-     MODAL DE CONFIRMAÇÃO DE ELIMINAÇÃO
-========================================================= -->
-<div
-    class="modal fade"
-    id="deleteModal"
-    tabindex="-1">
-
-    <div class="modal-dialog">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-
-                <h5 class="modal-title">
-                    Eliminar animal
-                </h5>
-
-                <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal">
-                </button>
-
+    <!-- MODAL DE CONFIRMAÇÃO DE ELIMINAÇÃO -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar animal</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Tem a certeza de que pretende eliminar <strong>Max</strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger">Eliminar</button>
+                </div>
             </div>
-
-
-            <div class="modal-body">
-
-                Tem a certeza de que pretende eliminar
-                <strong>Max</strong>?
-
-            </div>
-
-
-            <div class="modal-footer">
-
-                <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal">
-
-                    Cancelar
-
-                </button>
-
-                <button
-                    type="button"
-                    class="btn btn-danger">
-
-                    Eliminar
-
-                </button>
-
-            </div>
-
         </div>
-
     </div>
 
-</div>
-
-
-<!-- =========================================================
-     RODAPÉ
-========================================================= -->
-<footer class="bg-dark text-white py-4 mt-5">
-
-    <div class="container text-center">
-
-        <small>
-            &copy; 2026 VetCare
-        </small>
-
-    </div>
-
-</footer>
-
-
-</body>
-</html>
+@endsection
