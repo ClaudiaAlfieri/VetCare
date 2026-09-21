@@ -1,47 +1,8 @@
-<!doctype html>
-<html lang="pt">
+@extends('layout.main')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title', 'Login - VetCare')
 
-    <title>Login - VetCare</title>
-
-    @vite(['resources/css/app.scss', 'resources/js/app.js'])
-
-</head>
-
-<body class="bg-light">
-
-<!-- =========================================================
-     MENU / NAVEGAÇÃO
-========================================================= -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-
-    <div class="container">
-
-        <a class="navbar-brand fw-bold" href="home.html">
-            <i class="bi bi-heart-pulse"></i>
-            VetCare
-        </a>
-
-        <div class="navbar-nav">
-
-            <a class="nav-link" href="home.html">
-                Início
-            </a>
-
-        </div>
-
-    </div>
-
-</nav>
-
-
-<!-- =========================================================
-     CONTEÚDO PRINCIPAL
-========================================================= -->
-<main class="container py-5">
+@section('content')
 
     <div class="row justify-content-center">
 
@@ -77,12 +38,8 @@
 
                         <div class="mb-3">
 
-                            <label
-                                for="email"
-                                class="form-label">
-
+                            <label for="email" class="form-label">
                                 Email
-
                             </label>
 
                             <input
@@ -101,12 +58,8 @@
 
                         <div class="mb-3">
 
-                            <label
-                                for="password"
-                                class="form-label">
-
+                            <label for="password" class="form-label">
                                 Password
-
                             </label>
 
                             <input
@@ -126,12 +79,8 @@
                                 id="remember"
                             >
 
-                            <label
-                                class="form-check-label"
-                                for="remember">
-
+                            <label class="form-check-label" for="remember">
                                 Manter sessão iniciada
-
                             </label>
 
                         </div>
@@ -139,13 +88,9 @@
 
                         <div class="d-grid">
 
-                            <button
-                                type="submit"
-                                class="btn btn-primary">
-
+                            <button type="submit" class="btn btn-primary">
                                 <i class="bi bi-box-arrow-in-right"></i>
                                 Entrar
-
                             </button>
 
                         </div>
@@ -160,23 +105,4 @@
 
     </div>
 
-</main>
-
-
-<!-- =========================================================
-     RODAPÉ
-========================================================= -->
-<footer class="bg-dark text-white py-4 mt-5">
-
-    <div class="container text-center">
-
-        <small>
-            &copy; 2026 VetCare
-        </small>
-
-    </div>
-
-</footer>
-
-</body>
-</html>
+@endsection
