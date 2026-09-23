@@ -42,7 +42,10 @@
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a class="dropdown-item" href="{{ url('/login') }}">Terminar sessão</a>
+                            <form method="POST" action="{{ url('/logout') }}">
+                                @csrf
+                                <button type="submit" class="dropdown-item">Terminar sessão</button>
+                            </form>
                         </li>
                     </ul>
                 </div>
