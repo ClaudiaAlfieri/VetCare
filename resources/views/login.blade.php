@@ -27,14 +27,15 @@
                     </div>
 
 
-                    <!-- Exemplo de mensagem de erro -->
-                    <div class="alert alert-danger">
-                        Email ou password inválidos.
-                    </div>
-
-
                     <!-- Formulário de autenticação -->
-                    <form>
+                    <form method="POST" action="{{ url('/login') }}">
+                        @csrf
+
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                {{ $errors->first() }}
+                            </div>
+                        @endif
 
                         <div class="mb-3">
 
@@ -44,14 +45,18 @@
 
                             <input
                                 type="email"
+                                name="email"
                                 id="email"
-                                class="form-control is-invalid"
+                                class="form-control @error('email') is-invalid @enderror"
+                                value="{{ old('email') }}"
                                 placeholder="nome@email.pt"
                             >
 
+                            @error('email')
                             <div class="invalid-feedback">
-                                Introduza um endereço de email válido.
+                                {{ $message }}
                             </div>
+                            @enderror
 
                         </div>
 
@@ -64,6 +69,7 @@
 
                             <input
                                 type="password"
+                                name="password"
                                 id="password"
                                 class="form-control"
                             >
@@ -76,6 +82,7 @@
                             <input
                                 class="form-check-input"
                                 type="checkbox"
+                                name="remember"
                                 id="remember"
                             >
 
