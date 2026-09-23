@@ -43,3 +43,4 @@ Route::view(uri: '/services', view: 'services.index');
 Route::view(uri: '/services/1', view: 'services.show');
 Route::view(uri: '/services/create', view: 'services.create');
 Route::view(uri: '/services/1/edit', view: 'services.edit');
+Route::view(uri: '/appointments', view: 'appointments.index');
