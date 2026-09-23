@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pet extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['name', 'birth_date', 'species_id', 'user_id'];
 
     public function species()
