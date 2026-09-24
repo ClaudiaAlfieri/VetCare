@@ -36,9 +36,11 @@ class PetController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Pet $pet)
     {
-        //
+        $pet->load(['species', 'owner', 'notes.user']);
+
+        return view('pets.show', compact('pet'));
     }
 
     /**
