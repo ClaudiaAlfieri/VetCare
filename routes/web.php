@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PetController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,14 +25,14 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| Recursos (temporário: Route::view até os controllers existirem)
+| Recursos
 |--------------------------------------------------------------------------
 */
 
-Route::view('/pets', 'pets.index');
-Route::view('/pets/1', 'pets.show');
-Route::view('/pets/create', 'pets.create');
-Route::view('/pets/1/edit', 'pets.edit');
+Route::middleware('auth')->group(function () {
+    Route::resource('pets', PetController::class);
+});
+
 Route::view(uri: '/veterinarians', view: 'veterinarians.index');
 Route::view(uri: '/veterinarians/1', view: 'veterinarians.show');
 Route::view(uri: '/veterinarians/create', view: 'veterinarians.create');

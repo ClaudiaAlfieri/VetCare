@@ -12,7 +12,7 @@
             <p class="text-muted mb-0">Gestão dos animais registados na clínica.</p>
         </div>
 
-        <a href="{{ url('/pets/create') }}" class="btn btn-primary">
+        <a href="{{ route('pets.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i>
             Novo animal
         </a>
@@ -20,11 +20,13 @@
     </div>
 
 
-    <!-- MENSAGEM FLASH DE EXEMPLO -->
-    <div class="alert alert-success alert-dismissible fade show">
-        Animal registado com sucesso.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+    <!-- MENSAGEM FLASH -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
 
     <div class="card shadow-sm">
@@ -67,63 +69,35 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><strong>Max</strong></td>
-                        <td>Cão</td>
-                        <td>Ana Silva</td>
-                        <td>12/03/2021</td>
-                        <td><span class="badge text-bg-success">Ativo</span></td>
-                        <td class="text-end">
-                            <a href="{{ url('/pets/1') }}" class="btn btn-sm btn-outline-secondary" title="Ver">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="{{ url('/pets/1/edit') }}" class="btn btn-sm btn-outline-primary" title="Editar">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Eliminar">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td><strong>Luna</strong></td>
-                        <td>Gato</td>
-                        <td>João Santos</td>
-                        <td>07/08/2022</td>
-                        <td><span class="badge text-bg-success">Ativo</span></td>
-                        <td class="text-end">
-                            <a href="{{ url('/pets/1') }}" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="{{ url('/pets/1/edit') }}" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <button class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td><strong>Tobias</strong></td>
-                        <td>Coelho</td>
-                        <td>Maria Costa</td>
-                        <td>15/01/2024</td>
-                        <td><span class="badge text-bg-secondary">Inativo</span></td>
-                        <td class="text-end">
-                            <a href="{{ url('/pets/1') }}" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="{{ url('/pets/1/edit') }}" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <button class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    @forelse ($pets as $pet)
+                        <tr>
+                            <td>{{ $pet->id }}</td>
+                            <td><strong>{{ $pet->name }}</strong></td>
+                            <td>{{ $pet->species->name }}</td>
+                            <td>{{ $pet->owner->name }}</td>
+                            <td>{{ $pet->birth_date?->format('d/m/Y') }}</td>
+                            <td><span class="badge text-bg-success">Ativo</span></td>
+                            <td class="text-end">
+                                <a href="{{ route('pets.show', $pet) }}" class="btn btn-sm btn-outline-secondary" title="Ver">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ route('pets.edit', $pet) }}" class="btn btn-sm btn-outline-primary" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form action="{{ route('pets.destroy', $pet) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('Tem a certeza que pretende eliminar {{ $pet->name }}?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">Nenhum animal registado.</td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
@@ -147,26 +121,6 @@
                 </ul>
             </nav>
 
-        </div>
-    </div>
-
-
-    <!-- MODAL DE CONFIRMAÇÃO DE ELIMINAÇÃO -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Eliminar animal</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    Tem a certeza de que pretende eliminar <strong>Max</strong>?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger">Eliminar</button>
-                </div>
-            </div>
         </div>
     </div>
 

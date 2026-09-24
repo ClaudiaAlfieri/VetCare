@@ -11,6 +11,10 @@ class Pet extends Model
 
     protected $fillable = ['name', 'birth_date', 'species_id', 'user_id'];
 
+    protected $casts = [
+        'birth_date' => 'date',
+    ];
+
     public function species()
     {
         return $this->belongsTo(Species::class);
