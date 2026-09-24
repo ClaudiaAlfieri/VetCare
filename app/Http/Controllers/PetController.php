@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pet;
+use App\Models\Species;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PetController extends Controller
@@ -22,7 +24,10 @@ class PetController extends Controller
      */
     public function create()
     {
-        //
+        $species = Species::all();
+        $owners = User::role('user')->get();
+
+        return view('pets.create', compact('species', 'owners'));
     }
 
     /**
@@ -30,7 +35,16 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'species_id' => ['required', 'exists:species,id'],
+            'user_id' => ['required', 'exists:users,id'],
+            'birth_date' => ['nullable', 'date'],
+        ]);
+
+        Pet::create($validated);
+
+        return redirect()->route('pets.index')->with('success', 'Animal registado com sucesso.');
     }
 
     /**
