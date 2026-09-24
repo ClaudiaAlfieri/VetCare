@@ -60,17 +60,29 @@ class PetController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Pet $pet)
     {
-        //
+        $species = Species::all();
+        $owners = User::role('user')->get();
+
+        return view('pets.edit', compact('pet', 'species', 'owners'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Pet $pet)
     {
-        //
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'species_id' => ['required', 'exists:species,id'],
+            'user_id' => ['required', 'exists:users,id'],
+            'birth_date' => ['nullable', 'date'],
+        ]);
+
+        $pet->update($validated);
+
+        return redirect()->route('pets.index')->with('success', 'Animal atualizado com sucesso.');
     }
 
     /**
