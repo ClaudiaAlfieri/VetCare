@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Max - VetCare')
+@section('title', $pet->name . ' - VetCare')
 
 @section('content')
 
@@ -8,17 +8,17 @@
     <div class="d-flex justify-content-between align-items-start mb-4">
 
         <div>
-            <span class="badge text-bg-primary mb-2">Cão</span>
-            <h1>Max</h1>
-            <p class="text-muted">Animal #1</p>
+            <span class="badge text-bg-primary mb-2">{{ $pet->species->name }}</span>
+            <h1>{{ $pet->name }}</h1>
+            <p class="text-muted">Animal #{{ $pet->id }}</p>
         </div>
 
         <div>
-            <a href="{{ url('/pets/1/edit') }}" class="btn btn-primary">
+            <a href="{{ route('pets.edit', $pet) }}" class="btn btn-primary">
                 <i class="bi bi-pencil"></i>
                 Editar
             </a>
-            <a href="{{ url('/pets') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('pets.index') }}" class="btn btn-outline-secondary">
                 Voltar
             </a>
         </div>
@@ -38,19 +38,19 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <p><strong>Espécie:</strong><br>Cão</p>
-                            <p><strong>Sexo:</strong><br>Macho</p>
+                            <p><strong>Espécie:</strong><br>{{ $pet->species->name }}</p>
+                            <p><strong>Sexo:</strong><br>—</p>
                         </div>
                         <div class="col-md-6">
-                            <p><strong>Data de nascimento:</strong><br>12 março 2021</p>
-                            <p><strong>Peso:</strong><br>24,5 kg</p>
+                            <p><strong>Data de nascimento:</strong><br>{{ $pet->birth_date?->format('d F Y') }}</p>
+                            <p><strong>Peso:</strong><br>—</p>
                         </div>
                     </div>
 
                     <hr>
 
                     <h3 class="h6">Observações</h3>
-                    <p class="mb-0">Animal sociável. Sem alergias conhecidas.</p>
+                    <p class="mb-0">—</p>
                 </div>
             </div>
 
@@ -60,51 +60,29 @@
                 <div class="card-body">
                     <h2 class="h4 mb-4">Consultas</h2>
 
-                    <div class="table-responsive">
-                        <table class="table align-middle">
-                            <thead>
-                            <tr>
-                                <th>Data</th>
-                                <th>Veterinário</th>
-                                <th>Motivo</th>
-                                <th>Estado</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>12/09/2026</td>
-                                <td>Dr. Pedro Martins</td>
-                                <td>Consulta de rotina</td>
-                                <td><span class="badge text-bg-success">Realizada</span></td>
-                            </tr>
-                            <tr>
-                                <td>20/11/2026</td>
-                                <td>Dra. Sofia Costa</td>
-                                <td>Vacinação</td>
-                                <td><span class="badge text-bg-warning">Agendada</span></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <p class="text-muted mb-0">
+                        As consultas deste animal aparecerão aqui quando o módulo de consultas estiver pronto.
+                    </p>
                 </div>
             </div>
 
 
-            <!-- NOTAS (exemplo de informação proveniente da relação polimórfica) -->
+            <!-- NOTAS -->
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h2 class="h4 mb-4">Notas</h2>
 
-                    <div class="border-bottom pb-3 mb-3">
-                        <div class="d-flex justify-content-between">
-                            <strong>Dr. Pedro Martins</strong>
-                            <small class="text-muted">12/09/2026</small>
+                    @forelse ($pet->notes as $note)
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ $note->user->name }}</strong>
+                                <small class="text-muted">{{ $note->created_at->format('d/m/Y') }}</small>
+                            </div>
+                            <p class="mb-0 mt-2">{{ $note->body }}</p>
                         </div>
-                        <p class="mb-0 mt-2">
-                            Animal em bom estado geral.
-                            Recomenda-se controlo de peso.
-                        </p>
-                    </div>
+                    @empty
+                        <p class="text-muted">Ainda não há notas para este animal.</p>
+                    @endforelse
 
                     <!-- Formulário para nova nota -->
                     <form>
@@ -127,12 +105,12 @@
 
                     <p class="mb-1">
                         <i class="bi bi-person me-2"></i>
-                        <strong>Ana Silva</strong>
+                        <strong>{{ $pet->owner->name }}</strong>
                     </p>
 
                     <p class="text-muted">
                         <i class="bi bi-envelope me-2"></i>
-                        ana@email.pt
+                        {{ $pet->owner->email }}
                     </p>
 
                     <p class="text-muted mb-0">
@@ -150,7 +128,7 @@
                     <hr>
 
                     <p class="mb-1"><strong>Consultas realizadas:</strong></p>
-                    <p class="fs-4 mb-0">5</p>
+                    <p class="fs-4 mb-0">—</p>
                 </div>
             </div>
 
