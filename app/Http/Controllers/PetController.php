@@ -88,8 +88,10 @@ class PetController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Pet $pet)
     {
-        //
+        $pet->delete();
+
+        return redirect()->route('pets.index')->with('success', 'Animal eliminado com sucesso.');
     }
 }
