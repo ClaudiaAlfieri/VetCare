@@ -1,12 +1,12 @@
 @extends('layout.main')
 
-@section('title', 'Editar Serviço - VetCare')
+@section('title', 'Editar ' . $service->name . ' - VetCare')
 
 @section('content')
 
     <div class="mb-4">
         <h1 class="h2">Editar serviço</h1>
-        <p class="text-muted">Consulta de rotina</p>
+        <p class="text-muted">{{ $service->name }}</p>
     </div>
 
 
@@ -14,26 +14,37 @@
         <div class="card-body">
 
             <!-- FORMULÁRIO -->
-            <form>
+            <form method="POST" action="{{ route('services.update', $service) }}">
+                @csrf
+                @method('PUT')
 
                 <!-- Nome -->
                 <div class="mb-3">
                     <label for="name" class="form-label">Nome</label>
-                    <input type="text" id="name" class="form-control" value="Consulta de rotina">
+                    <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $service->name) }}">
+                    @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
 
                 <!-- Descrição -->
                 <div class="mb-3">
                     <label for="description" class="form-label">Descrição</label>
-                    <textarea id="description" class="form-control" rows="3">Avaliação geral de saúde do animal</textarea>
+                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="3">{{ old('description', $service->description) }}</textarea>
+                    @error('description')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
 
                 <!-- Preço -->
                 <div class="mb-4">
                     <label for="price" class="form-label">Preço (€)</label>
-                    <input type="number" step="0.01" min="0" id="price" class="form-control" value="25.00">
+                    <input type="number" step="0.01" min="0" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{ old('price', $service->price) }}">
+                    @error('price')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
                 </div>
 
 
@@ -43,7 +54,7 @@
                         <i class="bi bi-check-lg"></i>
                         Guardar alterações
                     </button>
-                    <a href="index.html" class="btn btn-secondary">Cancelar</a>
+                    <a href="{{ route('services.index') }}" class="btn btn-secondary">Cancelar</a>
                 </div>
 
             </form>

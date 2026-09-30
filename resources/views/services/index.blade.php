@@ -12,7 +12,7 @@
             <p class="text-muted mb-0">Gestão dos serviços prestados pela clínica.</p>
         </div>
 
-        <a href="create.html" class="btn btn-primary">
+        <a href="{{ route('services.create') }}" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i>
             Novo serviço
         </a>
@@ -20,11 +20,13 @@
     </div>
 
 
-    <!-- MENSAGEM FLASH DE EXEMPLO -->
-    <div class="alert alert-success alert-dismissible fade show">
-        Serviço registado com sucesso.
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
+    <!-- MENSAGEM FLASH -->
+    @if (session('success'))
+        <div class="alert alert-success alert-dismissible fade show">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
 
     <div class="card shadow-sm">
@@ -57,61 +59,33 @@
                     </tr>
                     </thead>
                     <tbody>
-
-                    <tr>
-                        <td>1</td>
-                        <td><strong>Consulta de rotina</strong></td>
-                        <td>Avaliação geral de saúde do animal</td>
-                        <td>25,00 €</td>
-                        <td class="text-end">
-                            <a href="show.html" class="btn btn-sm btn-outline-secondary" title="Ver">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="edit.html" class="btn btn-sm btn-outline-primary" title="Editar">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" title="Eliminar">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>2</td>
-                        <td><strong>Vacinação</strong></td>
-                        <td>Administração de vacina de rotina</td>
-                        <td>18,50 €</td>
-                        <td class="text-end">
-                            <a href="show.html" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="edit.html" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <button class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>3</td>
-                        <td><strong>Cirurgia de esterilização</strong></td>
-                        <td>Procedimento cirúrgico de esterilização</td>
-                        <td>120,00 €</td>
-                        <td class="text-end">
-                            <a href="show.html" class="btn btn-sm btn-outline-secondary">
-                                <i class="bi bi-eye"></i>
-                            </a>
-                            <a href="edit.html" class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <button class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-
+                    @forelse ($services as $service)
+                        <tr>
+                            <td>{{ $service->id }}</td>
+                            <td><strong>{{ $service->name }}</strong></td>
+                            <td>{{ $service->description }}</td>
+                            <td>{{ number_format($service->price, 2, ',', '.') }} €</td>
+                            <td class="text-end">
+                                <a href="{{ route('services.show', $service) }}" class="btn btn-sm btn-outline-secondary" title="Ver">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a href="{{ route('services.edit', $service) }}" class="btn btn-sm btn-outline-primary" title="Editar">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <form action="{{ route('services.destroy', $service) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Eliminar" onclick="return confirm('Tem a certeza que pretende eliminar {{ $service->name }}?')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">Nenhum serviço registado.</td>
+                        </tr>
+                    @endforelse
                     </tbody>
                 </table>
             </div>
@@ -127,9 +101,6 @@
                         <a class="page-link" href="#">1</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
                         <a class="page-link" href="#">Seguinte</a>
                     </li>
                 </ul>
@@ -138,24 +109,4 @@
         </div>
     </div>
 
-
-    <!-- MODAL DE CONFIRMAÇÃO DE ELIMINAÇÃO -->
-    <div class="modal fade" id="deleteModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Eliminar serviço</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                Tem a certeza de que pretende eliminar
-                <strong>Consulta de rotina</strong>?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-danger">Eliminar</button>
-            </div>
-        </div>
-    </div>
-    </div>
 @endsection
