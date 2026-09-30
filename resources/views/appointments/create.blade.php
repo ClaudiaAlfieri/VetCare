@@ -14,35 +14,37 @@
         <div class="card-body">
 
             <!-- FORMULÁRIO -->
-            <form>
+            <form method="POST" action="{{ route('appointments.store') }}">
+                @csrf
 
                 <div class="row">
 
                     <!-- Animal -->
                     <div class="col-md-6 mb-3">
-                        <label for="pet" class="form-label">Animal</label>
-                        <select id="pet" class="form-select is-invalid">
+                        <label for="pet_id" class="form-label">Animal</label>
+                        <select name="pet_id" id="pet_id" class="form-select @error('pet_id') is-invalid @enderror">
                             <option value="">Selecione...</option>
-                            <option>Max</option>
-                            <option>Luna</option>
-                            <option>Tobias</option>
+                            @foreach ($pets as $pet)
+                                <option value="{{ $pet->id }}" @selected(old('pet_id') == $pet->id)>{{ $pet->name }}</option>
+                            @endforeach
                         </select>
-
-                        <!-- Exemplo de mensagem de validação -->
-                        <div class="invalid-feedback">
-                            O animal é obrigatório.
-                        </div>
+                        @error('pet_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Veterinário -->
                     <div class="col-md-6 mb-3">
-                        <label for="veterinarian" class="form-label">Veterinário</label>
-                        <select id="veterinarian" class="form-select">
+                        <label for="veterinarian_id" class="form-label">Veterinário</label>
+                        <select name="veterinarian_id" id="veterinarian_id" class="form-select @error('veterinarian_id') is-invalid @enderror">
                             <option value="">Selecione...</option>
-                            <option>Dr. João Almeida</option>
-                            <option>Dra. Marta Sousa</option>
-                            <option>Dr. Pedro Nogueira</option>
+                            @foreach ($veterinarians as $veterinarian)
+                                <option value="{{ $veterinarian->id }}" @selected(old('veterinarian_id') == $veterinarian->id)>{{ $veterinarian->name }}</option>
+                            @endforeach
                         </select>
+                        @error('veterinarian_id')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                 </div>
@@ -53,17 +55,23 @@
                     <!-- Data -->
                     <div class="col-md-6 mb-3">
                         <label for="date" class="form-label">Data</label>
-                        <input type="date" id="date" class="form-control">
+                        <input type="date" name="date" id="date" class="form-control @error('date') is-invalid @enderror" value="{{ old('date') }}">
+                        @error('date')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <!-- Estado -->
                     <div class="col-md-6 mb-3">
                         <label for="status" class="form-label">Estado</label>
-                        <select id="status" class="form-select">
-                            <option>Agendada</option>
-                            <option>Realizada</option>
-                            <option>Cancelada</option>
+                        <select name="status" id="status" class="form-select @error('status') is-invalid @enderror">
+                            <option value="agendada" @selected(old('status', 'agendada') == 'agendada')>Agendada</option>
+                            <option value="realizada" @selected(old('status') == 'realizada')>Realizada</option>
+                            <option value="cancelada" @selected(old('status') == 'cancelada')>Cancelada</option>
                         </select>
+                        @error('status')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
                     </div>
 
                 </div>
@@ -74,28 +82,14 @@
                     <label class="form-label">Serviços</label>
 
                     <div class="border rounded p-3">
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="service1">
-                            <label class="form-check-label" for="service1">
-                                Consulta de rotina — 25,00 €
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="service2">
-                            <label class="form-check-label" for="service2">
-                                Vacinação — 18,50 €
-                            </label>
-                        </div>
-
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="service3">
-                            <label class="form-check-label" for="service3">
-                                Cirurgia de esterilização — 120,00 €
-                            </label>
-                        </div>
-
+                        @foreach ($services as $service)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="services[]" value="{{ $service->id }}" id="service{{ $service->id }}" @checked(collect(old('services'))->contains($service->id))>
+                                <label class="form-check-label" for="service{{ $service->id }}">
+                                    {{ $service->name }} — {{ number_format($service->price, 2, ',', '.') }} €
+                                </label>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
 
@@ -106,7 +100,7 @@
                         <i class="bi bi-check-lg"></i>
                         Registar consulta
                     </button>
-                    <a href="index.html" class="btn btn-secondary">Cancelar</a>
+                    <a href="{{ route('appointments.index') }}" class="btn btn-secondary">Cancelar</a>
                 </div>
 
             </form>

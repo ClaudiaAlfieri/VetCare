@@ -1,6 +1,6 @@
 @extends('layout.main')
 
-@section('title', 'Consulta #1 - VetCare')
+@section('title', 'Consulta #' . $appointment->id . ' - VetCare')
 
 @section('content')
 
@@ -8,17 +8,23 @@
     <div class="d-flex justify-content-between align-items-start mb-4">
 
         <div>
-            <span class="badge text-bg-success mb-2">Realizada</span>
-            <h1>Consulta de 12/09/2026</h1>
-            <p class="text-muted">Consulta #1</p>
+            @if ($appointment->status === 'realizada')
+                <span class="badge text-bg-success mb-2">Realizada</span>
+            @elseif ($appointment->status === 'agendada')
+                <span class="badge text-bg-warning mb-2">Agendada</span>
+            @else
+                <span class="badge text-bg-secondary mb-2">Cancelada</span>
+            @endif
+            <h1>Consulta de {{ $appointment->date->format('d/m/Y') }}</h1>
+            <p class="text-muted">Consulta #{{ $appointment->id }}</p>
         </div>
 
         <div>
-            <a href="edit.html" class="btn btn-primary">
+            <a href="{{ route('appointments.edit', $appointment) }}" class="btn btn-primary">
                 <i class="bi bi-pencil"></i>
                 Editar
             </a>
-            <a href="index.html" class="btn btn-outline-secondary">Voltar</a>
+            <a href="{{ route('appointments.index') }}" class="btn btn-outline-secondary">Voltar</a>
         </div>
 
     </div>
@@ -39,21 +45,21 @@
                         <div class="col-md-6">
                             <p>
                                 <strong>Animal:</strong><br>
-                                Max
+                                {{ $appointment->pet->name }}
                             </p>
                             <p>
                                 <strong>Veterinário:</strong><br>
-                                Dr. João Almeida
+                                {{ $appointment->veterinarian->name }}
                             </p>
                         </div>
                         <div class="col-md-6">
                             <p>
                                 <strong>Data:</strong><br>
-                                12/09/2026
+                                {{ $appointment->date->format('d/m/Y') }}
                             </p>
                             <p>
                                 <strong>Estado:</strong><br>
-                                Realizada
+                                {{ ucfirst($appointment->status) }}
                             </p>
                         </div>
                     </div>
@@ -77,10 +83,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>Consulta de rotina</td>
-                                <td class="text-end">25,00 €</td>
-                            </tr>
+                            @forelse ($appointment->services as $service)
+                                <tr>
+                                    <td>{{ $service->name }}</td>
+                                    <td class="text-end">{{ number_format($service->price, 2, ',', '.') }} €</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="2" class="text-center text-muted">Nenhum serviço associado.</td>
+                                </tr>
+                            @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -100,7 +112,7 @@
                     <h2 class="h5 mb-3">Resumo</h2>
 
                     <p class="mb-1"><strong>Total:</strong></p>
-                    <p class="fs-4 mb-0">25,00 €</p>
+                    <p class="fs-4 mb-0">{{ number_format($appointment->services->sum('price'), 2, ',', '.') }} €</p>
 
                 </div>
             </div>
