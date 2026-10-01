@@ -33,9 +33,9 @@
         <div class="card-body">
 
             <!-- PESQUISA / FILTROS -->
-            <form class="row g-3 mb-4">
+            <form method="GET" action="{{ route('services.index') }}" class="row g-3 mb-4">
                 <div class="col-md-9">
-                    <input type="search" class="form-control" placeholder="Pesquisar serviço...">
+                    <input type="search" name="search" class="form-control" placeholder="Pesquisar serviço..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-3">
                     <button type="submit" class="btn btn-outline-primary w-100">
@@ -92,19 +92,7 @@
 
 
             <!-- PAGINAÇÃO -->
-            <nav>
-                <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">Anterior</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Seguinte</a>
-                    </li>
-                </ul>
-            </nav>
+            {{ $services->links('pagination::bootstrap-5') }}
 
         </div>
     </div>
