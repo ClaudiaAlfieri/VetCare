@@ -60,6 +60,7 @@
                     <thead>
                     <tr>
                         <th>#</th>
+                        <th>Foto</th>
                         <th>Nome</th>
                         <th>Espécie</th>
                         <th>Tutor</th>
@@ -72,6 +73,13 @@
                     @forelse ($pets as $pet)
                         <tr>
                             <td>{{ $pet->id }}</td>
+                            <td>
+                                @if ($pet->photo)
+                                    <img src="{{ asset('storage/' . $pet->photo) }}" alt="{{ $pet->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                @else
+                                    <i class="bi bi-image text-muted fs-4"></i>
+                                @endif
+                            </td>
                             <td><strong>{{ $pet->name }}</strong></td>
                             <td>{{ $pet->species->name }}</td>
                             <td>{{ $pet->owner->name }}</td>
@@ -95,7 +103,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">Nenhum animal registado.</td>
+                            <td colspan="8" class="text-center text-muted py-4">Nenhum animal registado.</td>
                         </tr>
                     @endforelse
                     </tbody>

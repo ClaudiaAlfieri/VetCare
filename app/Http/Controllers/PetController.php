@@ -54,6 +54,7 @@ class PetController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'species_id' => ['required', 'exists:species,id'],
             'birth_date' => ['nullable', 'date'],
+            'photo' => ['nullable', 'image', 'max:2048'],
         ];
 
         if (auth()->user()->hasRole('admin')) {
@@ -61,6 +62,10 @@ class PetController extends Controller
         }
 
         $validated = $request->validate($rules);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('pets', 'public');
+        }
 
         $validated['user_id'] = auth()->user()->hasRole('admin')
             ? $validated['user_id']
@@ -107,6 +112,7 @@ class PetController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'species_id' => ['required', 'exists:species,id'],
             'birth_date' => ['nullable', 'date'],
+            'photo' => ['nullable', 'image', 'max:2048'],
         ];
 
         if (auth()->user()->hasRole('admin')) {
@@ -114,6 +120,10 @@ class PetController extends Controller
         }
 
         $validated = $request->validate($rules);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('pets', 'public');
+        }
 
         $pet->update($validated);
 

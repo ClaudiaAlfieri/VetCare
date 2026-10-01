@@ -7,10 +7,15 @@
     <!-- Cabeçalho -->
     <div class="d-flex justify-content-between align-items-start mb-4">
 
-        <div>
-            <span class="badge text-bg-primary mb-2">{{ $pet->species->name }}</span>
-            <h1>{{ $pet->name }}</h1>
-            <p class="text-muted">Animal #{{ $pet->id }}</p>
+        <div class="d-flex align-items-center gap-3">
+            @if ($pet->photo)
+                <img src="{{ asset('storage/' . $pet->photo) }}" alt="{{ $pet->name }}" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
+            @endif
+            <div>
+                <span class="badge text-bg-primary mb-2">{{ $pet->species->name }}</span>
+                <h1>{{ $pet->name }}</h1>
+                <p class="text-muted">Animal #{{ $pet->id }}</p>
+            </div>
         </div>
 
         <div>

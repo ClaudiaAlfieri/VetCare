@@ -9,7 +9,7 @@ class Pet extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['name', 'birth_date', 'species_id', 'user_id'];
+    protected $fillable = ['name', 'birth_date', 'species_id', 'user_id', 'photo'];
 
     protected $casts = [
         'birth_date' => 'date',

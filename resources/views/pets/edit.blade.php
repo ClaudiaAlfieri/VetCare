@@ -14,7 +14,7 @@
         <div class="card-body">
 
             <!-- FORMULÁRIO -->
-            <form method="POST" action="{{ route('pets.update', $pet) }}">
+            <form method="POST" action="{{ route('pets.update', $pet) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -22,6 +22,21 @@
                     <label for="name" class="form-label">Nome</label>
                     <input type="text" name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{ old('name', $pet->name) }}">
                     @error('name')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
+                <!-- Fotografia -->
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Fotografia</label>
+                    @if ($pet->photo)
+                        <div class="mb-2">
+                            <img src="{{ asset('storage/' . $pet->photo) }}" alt="{{ $pet->name }}" class="img-thumbnail" style="max-width: 150px;">
+                        </div>
+                    @endif
+                    <input type="file" name="photo" id="photo" class="form-control @error('photo') is-invalid @enderror" accept="image/*">
+                    @error('photo')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
