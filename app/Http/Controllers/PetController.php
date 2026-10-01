@@ -12,7 +12,7 @@ class PetController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $query = Pet::with(['species', 'owner']);
 
@@ -20,9 +20,18 @@ class PetController extends Controller
             $query->where('user_id', auth()->id());
         }
 
-        $pets = $query->paginate(10);
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
 
-        return view('pets.index', compact('pets'));
+        if ($request->filled('species_id')) {
+            $query->where('species_id', $request->species_id);
+        }
+
+        $pets = $query->paginate(10)->withQueryString();
+        $species = Species::all();
+
+        return view('pets.index', compact('pets', 'species'));
     }
 
     /**

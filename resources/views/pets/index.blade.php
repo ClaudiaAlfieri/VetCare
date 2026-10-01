@@ -33,16 +33,16 @@
         <div class="card-body">
 
             <!-- PESQUISA / FILTROS -->
-            <form class="row g-3 mb-4">
+            <form method="GET" action="{{ route('pets.index') }}" class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <input type="search" class="form-control" placeholder="Pesquisar animal...">
+                    <input type="search" name="search" class="form-control" placeholder="Pesquisar animal..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-3">
-                    <select class="form-select">
-                        <option>Todas as espécies</option>
-                        <option>Cão</option>
-                        <option>Gato</option>
-                        <option>Coelho</option>
+                    <select name="species_id" class="form-select">
+                        <option value="">Todas as espécies</option>
+                        @foreach ($species as $s)
+                            <option value="{{ $s->id }}" @selected(request('species_id') == $s->id)>{{ $s->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-3">
