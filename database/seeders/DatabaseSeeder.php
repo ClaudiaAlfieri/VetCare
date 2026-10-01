@@ -25,11 +25,23 @@ class DatabaseSeeder extends Seeder
         ]);
         $admin->assignRole('admin');
 
-        $tutor = User::factory()->create([
-            'name' => 'Tutor',
+        $anaSilva = User::factory()->create([
+            'name' => 'Ana Silva',
             'email' => 'user@vetcare.pt',
         ]);
-        $tutor->assignRole('user');
+        $anaSilva->assignRole('user');
+
+        $joaoSantos = User::factory()->create([
+            'name' => 'João Santos',
+            'email' => 'joao@vetcare.pt',
+        ]);
+        $joaoSantos->assignRole('user');
+
+        $mariaCosta = User::factory()->create([
+            'name' => 'Maria Costa',
+            'email' => 'maria@vetcare.pt',
+        ]);
+        $mariaCosta->assignRole('user');
 
         $this->call(SpeciesSeeder::class);
         $this->call(PetSeeder::class);
