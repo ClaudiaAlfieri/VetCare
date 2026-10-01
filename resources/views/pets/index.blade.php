@@ -104,22 +104,7 @@
 
 
             <!-- PAGINAÇÃO -->
-            <nav>
-                <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">Anterior</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Seguinte</a>
-                    </li>
-                </ul>
-            </nav>
+            {{ $pets->links('pagination::bootstrap-5') }}
 
         </div>
     </div>

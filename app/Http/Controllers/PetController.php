@@ -20,7 +20,7 @@ class PetController extends Controller
             $query->where('user_id', auth()->id());
         }
 
-        $pets = $query->get();
+        $pets = $query->paginate(10);
 
         return view('pets.index', compact('pets'));
     }
