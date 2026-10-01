@@ -1,58 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# VetCare
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Projeto da Unidade de Formação **UC 604 - Programar para a web, na vertente frontend (cliente-side)**.
 
-## About Laravel
+A VetCare é uma aplicação para ajudar a gerir uma clínica veterinária: registar animais, consultas, veterinários e serviços.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Elementos do grupo
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Claudia Jorge de Santis Alfieri
+- Ricardo Brauner de Carvalho Lopes
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## O que é a aplicação
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Quem visita o site sem fazer login consegue ver a página inicial, com informação geral sobre a clínica.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Depois de fazer login, existem dois tipos de conta diferentes:
 
-## Agentic Development
+- **Tutor (user)** — pode ver e gerir os seus próprios animais (os que ele é dono). Não consegue ver nem mexer nos animais de outras pessoas.
+- **Admin** — pode fazer tudo o que o tutor faz, mas sobre todos os animais, e ainda consegue gerir os veterinários, os serviços da clínica e marcar/editar consultas.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+---
 
-```bash
-composer require laravel/boost --dev
+## Funcionalidades principais
 
-php artisan boost:install
-```
+- **Página inicial** — com informação sobre a clínica, visível sem precisar de login.
+- **Login e logout** — não há registo de contas novas, os utilizadores já vêm criados pela base de dados (ver "Contas para testar" mais abaixo).
+- **Gestão de animais** — criar, ver, editar e apagar. Cada animal tem nome, espécie, data de nascimento, tutor e uma foto (opcional). Um tutor só vê e consegue mexer nos seus próprios animais; se tentar aceder a um animal de outra pessoa diretamente pelo link, aparece um erro de acesso negado. O admin vê e mexe em todos os animais.
+- **Gestão de consultas** (só o admin) — criar, ver, editar e apagar consultas, escolhendo o animal, o veterinário e os serviços feitos.
+- **Gestão de serviços** (só o admin) — criar, ver, editar e apagar os serviços da clínica (ex: vacinação, consulta de rotina).
+- **Gestão de veterinários** (só o admin) — criar, ver, editar e apagar veterinários.
+- **Notas** — os animais e as consultas podem ter notas associadas, usando a mesma tabela de notas para as duas coisas (é o exemplo da relação polimórfica pedida no enunciado). As notas já aparecem nas páginas de detalhe do animal e da consulta; por agora, para criar uma nota nova é preciso fazer diretamente na base de dados.
+- **Eliminação suave (soft delete)** — quando se apaga um animal, veterinário, serviço ou consulta, o registo não desaparece de vez da base de dados, só fica marcado como "apagado" e deixa de aparecer nas listas.
+- **Pesquisa, filtros e paginação** — nas listas de animais, consultas e serviços, já funcionam de verdade (não são só visuais).
+- **Mensagens de aviso** — a avisar quando algo corre bem (ex: "Animal registado com sucesso") ou quando falta preencher alguma coisa num formulário.
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## Como correr o projeto (migrations e seeders)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+1. Instalar as dependências:
+   ```bash
+   composer install
+   npm install
+   ```
 
-## Code of Conduct
+2. Criar o ficheiro `.env` e gerar a chave da aplicação:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+3. Confirmar que o `.env` está configurado para usar a base de dados (por defeito já está em SQLite).
 
-## Security Vulnerabilities
+4. Criar as tabelas e colocar dados de teste (migrations + seeders):
+   ```bash
+   php artisan migrate --seed
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+5. Correr este comando para as fotos dos animais funcionarem:
+   ```bash
+   php artisan storage:link
+   ```
 
-## License
+6. Compilar o CSS/JS:
+   ```bash
+   npm run build
+   ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+7. Ligar o servidor:
+   ```bash
+   php artisan serve
+   ```
+
+8. Abrir `http://localhost:8000` no browser.
+
+---
+
+## Contas para testar (utilizadores e roles)
+
+| Nome | Email | Password | Tipo de conta (role) |
+|---|---|---|---|
+| Admin | admin@vetcare.pt | password | admin |
+| Ana Silva | user@vetcare.pt | password | user (tutora) |
+| João Santos | joao@vetcare.pt | password | user (tutor) |
+| Maria Costa | maria@vetcare.pt | password | user (tutora) |
+
+---
+
+## Como está organizada a base de dados
+
+- **users** — as contas (admins e tutores).
+- **pets** — os animais, cada um com uma espécie e um dono (tutor).
+- **species** — as espécies possíveis (Cão, Gato, Coelho, Ave).
+- **veterinarians** — os veterinários da clínica.
+- **appointments** — as consultas, cada uma ligada a um animal e a um veterinário.
+- **services** — os serviços que a clínica oferece (ex: vacinação).
+- **appointment_service** — tabela extra só para ligar consultas a serviços (porque uma consulta pode ter vários serviços, e um serviço pode estar em várias consultas).
+- **notes** — as notas, que podem pertencer a um animal ou a uma consulta.
+
+Resumo das relações:
+- Um tutor tem vários animais (1 para muitos)
+- Uma espécie tem vários animais (1 para muitos)
+- Um animal tem várias consultas (1 para muitos)
+- Um veterinário tem várias consultas (1 para muitos)
+- Uma consulta pode ter vários serviços e um serviço pode estar em várias consultas (muitos para muitos)
+- Uma nota pode pertencer a um animal OU a uma consulta (relação polimórfica)
+
+### Diagrama
+
+![Diagrama da base de dados](docs/diagrama-base-dados.png)
+
+---
+
+## Fontes e apoios utilizados
+
+- Documentação do Laravel, do Bootstrap e do pacote Spatie Laravel Permission.
+- Os templates HTML que o professor deu, que usámos como ponto de partida para as páginas.
+- Usámos a IA Claude (Anthropic) algumas vezes ao longo do projeto, principalmente para perceber erros que apareciam e confirmar se o que estávamos a fazer estava correto.
+
+---
+
+## Declaração de originalidade
+
+Nós, elementos deste grupo, declaramos que este projeto foi feito por nós e representa o nosso trabalho.
+
+Declaramos também que todas as fontes externas, apoios, ferramentas e conteúdos que usámos estão identificados neste README.
+
+Confirmamos que:
+- não copiámos código de outros grupos;
+- não usámos projetos ou soluções já existentes como se fossem nossos;
+- qualquer código ou exemplo de fora que usámos foi percebido e adaptado por nós, não copiado diretamente;
+- não usámos a Inteligência Artificial para gerar o projeto por nós, só como apoio pontual para tirar dúvidas e perceber erros;
+- não demos o nosso código a outros grupos para eles entregarem como deles.
+
+Ambos os elementos do grupo conhecem a estrutura e o funcionamento geral da aplicação, mesmo as partes que não desenvolveram diretamente.
+
+**Os elementos do grupo**
+
+- Claudia Jorge de Santis Alfieri
+- Ricardo Brauner de Carvalho Lopes
+
+---
+
+## O que ainda falta / podia melhorar
+
+- Dar para adicionar notas diretamente pela página do animal ou da consulta (agora só conseguimos testar isso pelo tinker).
+- Poder colocar foto também nos veterinários.
+- Uma página com estatísticas gerais da clínica (dashboard).
