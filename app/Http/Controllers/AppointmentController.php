@@ -13,9 +13,20 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $appointments = Appointment::with(['pet', 'veterinarian', 'services'])->get();
+        $query = Appointment::with(['pet', 'veterinarian', 'services']);
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('pet', fn ($q) => $q->where('name', 'like', "%{$search}%"));
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $appointments = $query->paginate(10)->withQueryString();
 
         return view('appointments.index', compact('appointments'));
     }
