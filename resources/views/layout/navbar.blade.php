@@ -17,15 +17,18 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('/pets') }}">Animais</a>
                 </li>
+
+                @role('admin')
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Consultas</a>
+                    <a class="nav-link" href="{{ route('appointments.index') }}">Consultas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Veterinários</a>
+                    <a class="nav-link" href="{{ url('/veterinarians') }}">Veterinários</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Serviços</a>
+                    <a class="nav-link" href="{{ route('services.index') }}">Serviços</a>
                 </li>
+                @endrole
             </ul>
 
             @auth
