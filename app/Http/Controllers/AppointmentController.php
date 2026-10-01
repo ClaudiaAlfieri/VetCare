@@ -57,7 +57,7 @@ class AppointmentController extends Controller
      */
     public function show(Appointment $appointment)
     {
-        $appointment->load(['pet', 'veterinarian', 'services']);
+        $appointment->load(['pet', 'veterinarian', 'services', 'notes.user']);
 
         return view('appointments.show', compact('appointment'));
     }

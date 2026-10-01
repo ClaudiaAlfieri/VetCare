@@ -29,4 +29,9 @@ class Appointment extends Model
     {
         return $this->belongsToMany(Service::class, 'appointment_service');
     }
+
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'noteable');
+    }
 }

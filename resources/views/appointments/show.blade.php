@@ -69,7 +69,7 @@
 
 
             <!-- SERVIÇOS -->
-            <div class="card shadow-sm">
+            <div class="card shadow-sm mb-4">
                 <div class="card-body">
 
                     <h2 class="h4 mb-4">Serviços incluídos</h2>
@@ -96,6 +96,28 @@
                             </tbody>
                         </table>
                     </div>
+
+                </div>
+            </div>
+
+
+            <!-- NOTAS (exemplo de informação proveniente da relação polimórfica) -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <h2 class="h4 mb-4">Notas da consulta</h2>
+
+                    @forelse ($appointment->notes as $note)
+                        <div class="border-bottom pb-3 mb-3">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ $note->user->name }}</strong>
+                                <small class="text-muted">{{ $note->created_at->format('d/m/Y') }}</small>
+                            </div>
+                            <p class="mb-0 mt-2">{{ $note->body }}</p>
+                        </div>
+                    @empty
+                        <p class="text-muted">Ainda não há notas para esta consulta.</p>
+                    @endforelse
 
                 </div>
             </div>
