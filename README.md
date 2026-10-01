@@ -111,7 +111,7 @@ Resumo das relações:
 
 ### Diagrama
 
-![Diagrama da base de dados](docs/diagrama-base-dados.png)
+![Diagrama da base de dados](Diagrama_ER_de_Clínica_Veterinária.png)
 
 ---
 
