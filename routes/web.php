@@ -5,6 +5,7 @@ use App\Http\Controllers\PetController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\VeterinarianController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,11 +37,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::view(uri: '/veterinarians', view: 'veterinarians.index');
-    Route::view(uri: '/veterinarians/1', view: 'veterinarians.show');
-    Route::view(uri: '/veterinarians/create', view: 'veterinarians.create');
-    Route::view(uri: '/veterinarians/1/edit', view: 'veterinarians.edit');
+    Route::resource('veterinarians', VeterinarianController::class);
     Route::resource('services', ServiceController::class);
     Route::resource('appointments', AppointmentController::class);
-
 });
