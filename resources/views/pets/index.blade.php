@@ -33,16 +33,16 @@
         <div class="card-body">
 
             <!-- PESQUISA / FILTROS -->
-            <form class="row g-3 mb-4">
+            <form method="GET" action="{{ route('pets.index') }}" class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <input type="search" class="form-control" placeholder="Pesquisar animal...">
+                    <input type="search" name="search" class="form-control" placeholder="Pesquisar animal..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-3">
-                    <select class="form-select">
-                        <option>Todas as espécies</option>
-                        <option>Cão</option>
-                        <option>Gato</option>
-                        <option>Coelho</option>
+                    <select name="species_id" class="form-select">
+                        <option value="">Todas as espécies</option>
+                        @foreach ($species as $s)
+                            <option value="{{ $s->id }}" @selected(request('species_id') == $s->id)>{{ $s->name }}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -60,6 +60,7 @@
                     <thead>
                     <tr>
                         <th>#</th>
+                        <th>Foto</th>
                         <th>Nome</th>
                         <th>Espécie</th>
                         <th>Tutor</th>
@@ -72,6 +73,13 @@
                     @forelse ($pets as $pet)
                         <tr>
                             <td>{{ $pet->id }}</td>
+                            <td>
+                                @if ($pet->photo)
+                                    <img src="{{ asset('storage/' . $pet->photo) }}" alt="{{ $pet->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                @else
+                                    <i class="bi bi-image text-muted fs-4"></i>
+                                @endif
+                            </td>
                             <td><strong>{{ $pet->name }}</strong></td>
                             <td>{{ $pet->species->name }}</td>
                             <td>{{ $pet->owner->name }}</td>
@@ -95,7 +103,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">Nenhum animal registado.</td>
+                            <td colspan="8" class="text-center text-muted py-4">Nenhum animal registado.</td>
                         </tr>
                     @endforelse
                     </tbody>
@@ -104,22 +112,7 @@
 
 
             <!-- PAGINAÇÃO -->
-            <nav>
-                <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">Anterior</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Seguinte</a>
-                    </li>
-                </ul>
-            </nav>
+            {{ $pets->links('pagination::bootstrap-5') }}
 
         </div>
     </div>

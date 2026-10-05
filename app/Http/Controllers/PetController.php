@@ -12,11 +12,26 @@ class PetController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pets = Pet::with(['species', 'owner'])->get();
+        $query = Pet::with(['species', 'owner']);
 
-        return view('pets.index', compact('pets'));
+        if (! auth()->user()->hasRole('admin')) {
+            $query->where('user_id', auth()->id());
+        }
+
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('species_id')) {
+            $query->where('species_id', $request->species_id);
+        }
+
+        $pets = $query->paginate(10)->withQueryString();
+        $species = Species::all();
+
+        return view('pets.index', compact('pets', 'species'));
     }
 
     /**
@@ -25,7 +40,7 @@ class PetController extends Controller
     public function create()
     {
         $species = Species::all();
-        $owners = User::role('user')->get();
+        $owners = auth()->user()->hasRole('admin') ? User::role('user')->get() : collect();
 
         return view('pets.create', compact('species', 'owners'));
     }
@@ -35,12 +50,26 @@ class PetController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'species_id' => ['required', 'exists:species,id'],
-            'user_id' => ['required', 'exists:users,id'],
             'birth_date' => ['nullable', 'date'],
-        ]);
+            'photo' => ['nullable', 'image', 'max:2048'],
+        ];
+
+        if (auth()->user()->hasRole('admin')) {
+            $rules['user_id'] = ['required', 'exists:users,id'];
+        }
+
+        $validated = $request->validate($rules);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('pets', 'public');
+        }
+
+        $validated['user_id'] = auth()->user()->hasRole('admin')
+            ? $validated['user_id']
+            : auth()->id();
 
         Pet::create($validated);
 
@@ -52,6 +81,8 @@ class PetController extends Controller
      */
     public function show(Pet $pet)
     {
+        abort_if(! auth()->user()->hasRole('admin') && $pet->user_id !== auth()->id(), 403);
+
         $pet->load(['species', 'owner', 'notes.user']);
 
         return view('pets.show', compact('pet'));
@@ -62,8 +93,10 @@ class PetController extends Controller
      */
     public function edit(Pet $pet)
     {
+        abort_if(! auth()->user()->hasRole('admin') && $pet->user_id !== auth()->id(), 403);
+
         $species = Species::all();
-        $owners = User::role('user')->get();
+        $owners = auth()->user()->hasRole('admin') ? User::role('user')->get() : collect();
 
         return view('pets.edit', compact('pet', 'species', 'owners'));
     }
@@ -73,12 +106,24 @@ class PetController extends Controller
      */
     public function update(Request $request, Pet $pet)
     {
-        $validated = $request->validate([
+        abort_if(! auth()->user()->hasRole('admin') && $pet->user_id !== auth()->id(), 403);
+
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'species_id' => ['required', 'exists:species,id'],
-            'user_id' => ['required', 'exists:users,id'],
             'birth_date' => ['nullable', 'date'],
-        ]);
+            'photo' => ['nullable', 'image', 'max:2048'],
+        ];
+
+        if (auth()->user()->hasRole('admin')) {
+            $rules['user_id'] = ['required', 'exists:users,id'];
+        }
+
+        $validated = $request->validate($rules);
+
+        if ($request->hasFile('photo')) {
+            $validated['photo'] = $request->file('photo')->store('pets', 'public');
+        }
 
         $pet->update($validated);
 
@@ -90,6 +135,8 @@ class PetController extends Controller
      */
     public function destroy(Pet $pet)
     {
+        abort_if(! auth()->user()->hasRole('admin') && $pet->user_id !== auth()->id(), 403);
+
         $pet->delete();
 
         return redirect()->route('pets.index')->with('success', 'Animal eliminado com sucesso.');

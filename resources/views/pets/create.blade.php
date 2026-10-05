@@ -14,7 +14,7 @@
         <div class="card-body">
 
             <!-- FORMULÁRIO -->
-            <form method="POST" action="{{ route('pets.store') }}">
+            <form method="POST" action="{{ route('pets.store') }}" enctype="multipart/form-data">
                 @csrf
 
                 <!-- Nome -->
@@ -27,9 +27,19 @@
                 </div>
 
 
+                <!-- Fotografia -->
+                <div class="mb-3">
+                    <label for="photo" class="form-label">Fotografia</label>
+                    <input type="file" name="photo" id="photo" class="form-control @error('photo') is-invalid @enderror" accept="image/*">
+                    @error('photo')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
                 <div class="row">
 
-                    <!-- Tutor -->
+                    @role('admin')
                     <div class="col-md-6 mb-3">
                         <label for="user_id" class="form-label">Tutor</label>
                         <select name="user_id" id="user_id" class="form-select @error('user_id') is-invalid @enderror">
@@ -42,6 +52,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+                    @endrole
 
                     <!-- Espécie -->
                     <div class="col-md-6 mb-3">

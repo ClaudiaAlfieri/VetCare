@@ -33,16 +33,16 @@
         <div class="card-body">
 
             <!-- PESQUISA / FILTROS -->
-            <form class="row g-3 mb-4">
+            <form method="GET" action="{{ route('appointments.index') }}" class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <input type="search" class="form-control" placeholder="Pesquisar consulta...">
+                    <input type="search" name="search" class="form-control" placeholder="Pesquisar por animal..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-3">
-                    <select class="form-select">
-                        <option>Todos os estados</option>
-                        <option>Agendada</option>
-                        <option>Realizada</option>
-                        <option>Cancelada</option>
+                    <select name="status" class="form-select">
+                        <option value="">Todos os estados</option>
+                        <option value="agendada" @selected(request('status') === 'agendada')>Agendada</option>
+                        <option value="realizada" @selected(request('status') === 'realizada')>Realizada</option>
+                        <option value="cancelada" @selected(request('status') === 'cancelada')>Cancelada</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -112,19 +112,7 @@
 
 
             <!-- PAGINAÇÃO -->
-            <nav>
-                <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#">Anterior</a>
-                    </li>
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Seguinte</a>
-                    </li>
-                </ul>
-            </nav>
+            {{ $appointments->links('pagination::bootstrap-5') }}
 
         </div>
     </div>
